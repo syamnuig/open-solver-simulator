@@ -222,6 +222,7 @@ function renderProductMix() {
     };
   }
 
+  // PATCH: Only rerender product headers when resource name edit is finished (not on every keystroke)
   function renderResources() {
     const container = root.querySelector("#resource-list");
     container.innerHTML = resources.map((res, idx) => `
@@ -234,15 +235,24 @@ function renderProductMix() {
       </div>
     `).join("");
     Array.from(container.querySelectorAll('.resource-input-row')).forEach((row, idx) => {
-      row.querySelectorAll('input')[0].oninput = e => {
+      const nameInput = row.querySelectorAll('input')[0];
+      nameInput.oninput = e => {
         resources[idx].name = e.target.value;
-        rerender(); // to update product resource dropdowns/headers live
+        // Do NOT rerender here!
       };
+      nameInput.onblur = () => {
+        rerender();
+      };
+      nameInput.onkeydown = (ev) => {
+        if (ev.key === "Enter") {
+          nameInput.blur();
+        }
+      };
+
       row.querySelectorAll('input')[1].oninput = e => resources[idx].stock = parseFloat(e.target.value) || 0;
       row.querySelector('.remove-btn').onclick = function() {
         if (resources.length > 1) {
           resources.splice(idx, 1);
-          // For every product, remove resourceMap entry for this idx
           products.forEach(prod => prod.resourceMap.splice(idx, 1));
           rerender();
         }
