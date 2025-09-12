@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Open Solver Simulator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <header class="app-header">
+    <img src="assets/logo.svg" alt="App Logo" class="logo"/>
+    <h1>Open Solver Simulator</h1>
+    <nav>
+      <button id="mode-financial" class="nav-btn active">Financial Planning</button>
+      <button id="mode-product-mix" class="nav-btn">Product Mix Optimization</button>
+    </nav>
+  </header>
+  <main id="app-main">
+    <!-- Dynamic content injected by app.js -->
+  </main>
+  <footer>
+    <span>Open Source | Inspired by Meta, Twitter, and Google Material Design</span>
+  </footer>
+  <script src="libs/javascript-lp-solver.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
