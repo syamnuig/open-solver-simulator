@@ -23,7 +23,7 @@ function renderSelector() {
   });
 }
 
-// --- FINANCIAL PLANNING UI (Version 1 logic/fields, improved UI, euro symbol) ---
+// --- FINANCIAL PLANNING UI (no change from last good version) ---
 function renderFinancialUI() {
   root.innerHTML = `
     <div class="material-card" id="financial-card">
@@ -94,7 +94,7 @@ function renderFinancialUI() {
   };
 }
 
-// --- Product Mix Optimization Application ---
+// --- PRODUCT MIX OPTIMIZATION UI: Improved labels/UX ---
 function renderProductMix() {
   root.innerHTML = `
     <div class="material-card" id="product-mix-card">
@@ -104,8 +104,16 @@ function renderProductMix() {
       <div class="app-content-title">Product Mix Optimization</div>
       <form id="product-mix-form" autocomplete="off">
         <div class="form-section-title">Products</div>
-        <div id="products-list"></div>
-        <button type="button" class="add-btn" id="add-product-btn" style="margin-bottom:0.8rem;">Add Product</button>
+        <div class="product-input-grid">
+          <div class="product-input-header">
+            <span>Product Name</span>
+            <span>Profit per unit (€)</span>
+            <span>Resource per unit</span>
+            <span></span>
+          </div>
+          <div id="products-list"></div>
+          <button type="button" id="add-product-btn">Add Product</button>
+        </div>
         <div class="divider"></div>
         <div class="form-section-title">Constraints</div>
         <div class="form-row">
@@ -116,29 +124,37 @@ function renderProductMix() {
       </form>
       <div id="product-mix-result"></div>
     </div>
+    <div class="tool-usage-note">
+      <b>How to use this tool:</b><br>
+      - Enter one or more products, specifying their name, profit per unit (€), and resource requirement per unit.<br>
+      - Set the total resource limit. <br>
+      - Click "Optimize Mix" to calculate the optimal product quantities for maximum total profit without exceeding your resource limit.<br>
+      <br>
+      <b>Note:</b> All values should be non-negative. At least one product is required. Results are computed using linear programming.
+    </div>
   `;
   root.querySelector('.back-btn').onclick = renderSelector;
 
   let products = [
-    { name: "Product A", profit: 20, resource: 10, quantity: 0 },
-    { name: "Product B", profit: 30, resource: 20, quantity: 0 }
+    { name: "Product A", profit: 20, resource: 10 },
+    { name: "Product B", profit: 30, resource: 20 }
   ];
   renderProducts();
 
   function renderProducts() {
     const container = root.querySelector("#products-list");
     container.innerHTML = products.map((prod, idx) => `
-      <div class="form-row" data-idx="${idx}">
-        <input placeholder="Name" type="text" value="${prod.name}" style="flex:1.2;" required />
-        <input placeholder="Profit" type="number" min="0" step="0.01" value="${prod.profit}" style="width:70px;" required />
-        <input placeholder="Resource" type="number" min="0" step="0.01" value="${prod.resource}" style="width:70px;" required />
-        <button type="button" class="remove-btn" title="Remove" ${products.length <= 1 ? 'disabled style="opacity:0.3;cursor:default;"' : ''}>
+      <div class="product-input-row" data-idx="${idx}">
+        <input type="text" placeholder="Product Name" value="${prod.name}" required aria-label="Product Name">
+        <input type="number" min="0" step="0.01" placeholder="Profit per unit (€)" value="${prod.profit}" required aria-label="Profit per unit (€)">
+        <input type="number" min="0" step="0.01" placeholder="Resource per unit" value="${prod.resource}" required aria-label="Resource per unit">
+        <button type="button" class="remove-btn" title="Remove" ${products.length <= 1 ? 'disabled' : ''}>
           <span class="material-icons">close</span>
         </button>
       </div>
     `).join("");
 
-    Array.from(container.querySelectorAll('.form-row')).forEach((row, idx) => {
+    Array.from(container.querySelectorAll('.product-input-row')).forEach((row, idx) => {
       row.querySelectorAll('input')[0].oninput = e => products[idx].name = e.target.value;
       row.querySelectorAll('input')[1].oninput = e => products[idx].profit = parseFloat(e.target.value) || 0;
       row.querySelectorAll('input')[2].oninput = e => products[idx].resource = parseFloat(e.target.value) || 0;
@@ -152,7 +168,7 @@ function renderProductMix() {
   }
 
   root.querySelector("#add-product-btn").onclick = function() {
-    products.push({ name: "Product " + String.fromCharCode(65 + products.length), profit: 0, resource: 0, quantity: 0 });
+    products.push({ name: `Product ${String.fromCharCode(65 + products.length)}`, profit: 0, resource: 0 });
     renderProducts();
   };
 
@@ -165,7 +181,7 @@ function renderProductMix() {
       constraints: { resource: { "max": limit } },
       variables: {}
     };
-    products.forEach((prod, idx) => {
+    products.forEach(prod => {
       model.variables[prod.name] = { profit: prod.profit, resource: prod.resource };
     });
 
@@ -182,7 +198,7 @@ function renderProductMix() {
 
     let output = `<div class="result-block"><b>Optimal Product Mix:</b><br>`;
     products.forEach(prod => {
-      output += `${prod.name}: <b>${result[prod.name] ? result[prod.name].toFixed(2) : 0}</b><br>`;
+      output += `${prod.name}: <b>${result[prod.name] ? result[prod.name].toFixed(2) : 0}</b> units<br>`;
     });
     output += `<br><b>Total Profit:</b> €${result.result.toFixed(2)}</div>`;
     root.querySelector("#product-mix-result").innerHTML = output;
