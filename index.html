@@ -1,27 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Open Solver Simulator</title>
-  <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!-- Solver Library CDN (must be before your app.js) -->
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/javascript-lp-solver@0.4.24/prod/solver.js"></script>
 </head>
 <body>
-  <header class="app-header">
-    <img src="assets/logo.svg" alt="App Logo" class="logo"/>
-    <h1>Open Solver Simulator</h1>
-    <nav>
-      <button id="mode-financial" class="nav-btn active">Financial Planning</button>
-      <button id="mode-product-mix" class="nav-btn">Product Mix Optimization</button>
-    </nav>
-  </header>
-  <main id="app-main">
-    <!-- Dynamic content injected by app.js -->
-  </main>
+  <div id="app-root"></div>
   <footer>
     <span>Open Source | Inspired by Meta, Twitter, and Google Material Design</span>
   </footer>
