@@ -32,7 +32,7 @@ body {
   box-shadow: var(--card-shadow);
   padding: 3.5rem 2.6rem 2.6rem 2.6rem;
   min-width: 340px;
-  max-width: 500px;
+  max-width: 570px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -128,31 +128,29 @@ body {
   width: 100%;
 }
 
-.product-input-grid {
+/* Resource Section */
+.resource-input-grid {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
   margin-bottom: 0.7rem;
 }
-
-.product-input-header {
+.resource-input-header {
   display: grid;
-  grid-template-columns: 2.2fr 1.2fr 1.2fr 0.4fr;
+  grid-template-columns: 2.2fr 1.2fr 0.4fr;
   gap: 0.4rem;
   font-size: 1rem;
   color: #1565c0;
   font-weight: 600;
 }
-
-.product-input-row {
+.resource-input-row {
   display: grid;
-  grid-template-columns: 2.2fr 1.2fr 1.2fr 0.4fr;
+  grid-template-columns: 2.2fr 1.2fr 0.4fr;
   gap: 0.4rem;
   align-items: center;
 }
-
-.product-input-row input {
+.resource-input-row input {
   border: 1.5px solid #c6d7ee;
   border-radius: 8px;
   padding: 0.6rem 0.8rem;
@@ -163,11 +161,86 @@ body {
   min-width: 0;
   width: 100%;
 }
-
-.product-input-row input:focus {
+.resource-input-row input:focus {
   border-color: var(--primary-blue);
 }
+.resource-input-row .remove-btn {
+  background: none;
+  border: none;
+  color: #e43f5a;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.16s;
+  width: 36px;
+  height: 36px;
+}
+.resource-input-row .remove-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.resource-input-row .remove-btn:hover:not(:disabled) {
+  background: #f2cdd2;
+  color: #b90e2b;
+}
+#add-resource-btn {
+  background: var(--primary-blue);
+  color: var(--on-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  margin-top: 0.7rem;
+  cursor: pointer;
+  transition: background 0.18s;
+  box-shadow: 0 2px 8px 0 rgba(25, 118, 210, 0.08);
+  width: max-content;
+}
+#add-resource-btn:hover {
+  background: var(--primary-accent);
+}
 
+/* Product Section */
+.product-input-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+.product-input-header {
+  display: grid;
+  grid-template-columns: 2.1fr 1.5fr repeat(var(--resource-count, 1), 1.1fr) 0.4fr;
+  gap: 0.4rem;
+  font-size: 1rem;
+  color: #1565c0;
+  font-weight: 600;
+}
+.product-input-row {
+  display: grid;
+  grid-template-columns: 2.1fr 1.5fr repeat(var(--resource-count, 1), 1.1fr) 0.4fr;
+  gap: 0.4rem;
+  align-items: center;
+  width: 100%;
+}
+.product-input-row input, .product-input-row select {
+  border: 1.5px solid #c6d7ee;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  background: #fff;
+  transition: border 0.2s;
+  outline: none;
+  min-width: 0;
+  width: 100%;
+}
+.product-input-row input:focus, .product-input-row select:focus {
+  border-color: var(--primary-blue);
+}
 .product-input-row .remove-btn {
   background: none;
   border: none;
@@ -182,17 +255,14 @@ body {
   width: 36px;
   height: 36px;
 }
-
 .product-input-row .remove-btn:disabled {
   opacity: 0.3;
   cursor: default;
 }
-
 .product-input-row .remove-btn:hover:not(:disabled) {
   background: #f2cdd2;
   color: #b90e2b;
 }
-
 #add-product-btn {
   background: var(--primary-blue);
   color: var(--on-primary);
@@ -207,41 +277,8 @@ body {
   box-shadow: 0 2px 8px 0 rgba(25, 118, 210, 0.08);
   width: max-content;
 }
-
 #add-product-btn:hover {
   background: var(--primary-accent);
-}
-
-.form-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  margin-bottom: 1.3rem;
-}
-
-.form-row label {
-  flex: 1.1;
-  color: #222;
-  font-size: 1.08rem;
-  font-weight: 500;
-  text-align: left;
-}
-
-.form-row input {
-  flex: 1.2;
-  border: 1.5px solid #c6d7ee;
-  border-radius: 8px;
-  padding: 0.7rem 0.95rem;
-  font-size: 1.1rem;
-  background: #fff;
-  transition: border 0.2s;
-  outline: none;
-  min-width: 0;
-}
-
-.form-row input:focus {
-  border-color: var(--primary-blue);
 }
 
 .calc-btn {
@@ -306,7 +343,7 @@ body {
   padding: 1.3rem 1.3rem 1.2rem 1.3rem;
   font-size: 1.05rem;
   width: 100%;
-  max-width: 500px;
+  max-width: 570px;
   text-align: left;
   margin: 2.1rem auto 0 auto;
   line-height: 1.55;
@@ -320,7 +357,7 @@ footer {
   letter-spacing: 0.05em;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .material-card, .tool-usage-note {
     padding: 1.3rem 0.6rem 1rem 0.6rem;
     min-width: unset;

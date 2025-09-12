@@ -23,7 +23,6 @@ function renderSelector() {
   });
 }
 
-// --- FINANCIAL PLANNING UI (no change from last good version) ---
 function renderFinancialUI() {
   root.innerHTML = `
     <div class="material-card" id="financial-card">
@@ -94,115 +93,198 @@ function renderFinancialUI() {
   };
 }
 
-// --- PRODUCT MIX OPTIMIZATION UI: Improved labels/UX ---
+// --- PRODUCT MIX OPTIMIZATION: dynamic resources and products ---
 function renderProductMix() {
-  root.innerHTML = `
-    <div class="material-card" id="product-mix-card">
-      <button class="back-btn" title="Back" aria-label="Back">
-        <span class="material-icons">arrow_back</span> Back
-      </button>
-      <div class="app-content-title">Product Mix Optimization</div>
-      <form id="product-mix-form" autocomplete="off">
-        <div class="form-section-title">Products</div>
-        <div class="product-input-grid">
-          <div class="product-input-header">
-            <span>Product Name</span>
-            <span>Profit per unit (€)</span>
-            <span>Resource per unit</span>
-            <span></span>
-          </div>
-          <div id="products-list"></div>
-          <button type="button" id="add-product-btn">Add Product</button>
-        </div>
-        <div class="divider"></div>
-        <div class="form-section-title">Constraints</div>
-        <div class="form-row">
-          <label for="resource-limit">Total Resource Limit:</label>
-          <input id="resource-limit" type="number" min="0" step="0.01" value="100" />
-        </div>
-        <button class="calc-btn" type="submit">Optimize Mix</button>
-      </form>
-      <div id="product-mix-result"></div>
-    </div>
-    <div class="tool-usage-note">
-      <b>How to use this tool:</b><br>
-      - Enter one or more products, specifying their name, profit per unit (€), and resource requirement per unit.<br>
-      - Set the total resource limit. <br>
-      - Click "Optimize Mix" to calculate the optimal product quantities for maximum total profit without exceeding your resource limit.<br>
-      <br>
-      <b>Note:</b> All values should be non-negative. At least one product is required. Results are computed using linear programming.
-    </div>
-  `;
-  root.querySelector('.back-btn').onclick = renderSelector;
-
-  let products = [
-    { name: "Product A", profit: 20, resource: 10 },
-    { name: "Product B", profit: 30, resource: 20 }
+  // Initial state
+  let resources = [
+    { name: "Resource 1", stock: 100 }
   ];
-  renderProducts();
+  let products = [
+    { name: "Product A", profit: 20, resourceMap: [{ resourceIdx: 0, amount: 1 }] }
+  ];
 
-  function renderProducts() {
-    const container = root.querySelector("#products-list");
-    container.innerHTML = products.map((prod, idx) => `
-      <div class="product-input-row" data-idx="${idx}">
-        <input type="text" placeholder="Product Name" value="${prod.name}" required aria-label="Product Name">
-        <input type="number" min="0" step="0.01" placeholder="Profit per unit (€)" value="${prod.profit}" required aria-label="Profit per unit (€)">
-        <input type="number" min="0" step="0.01" placeholder="Resource per unit" value="${prod.resource}" required aria-label="Resource per unit">
-        <button type="button" class="remove-btn" title="Remove" ${products.length <= 1 ? 'disabled' : ''}>
+  function rerender() {
+    // Set CSS variable for dynamic grid columns
+    document.documentElement.style.setProperty('--resource-count', resources.length);
+
+    root.innerHTML = `
+      <div class="material-card" id="product-mix-card">
+        <button class="back-btn" title="Back" aria-label="Back">
+          <span class="material-icons">arrow_back</span> Back
+        </button>
+        <div class="app-content-title">Product Mix Optimization</div>
+        <form id="product-mix-form" autocomplete="off">
+          <div class="form-section-title">Resources</div>
+          <div class="resource-input-grid">
+            <div class="resource-input-header">
+              <span>Resource Name</span>
+              <span>Inventory Stock</span>
+              <span></span>
+            </div>
+            <div id="resource-list"></div>
+            <button type="button" id="add-resource-btn" ${resources.length >= 5 ? 'disabled style="opacity:.5;cursor:not-allowed;"' : ''}>Add Resource</button>
+          </div>
+          <div class="divider"></div>
+          <div class="form-section-title">Products</div>
+          <div class="product-input-grid">
+            <div class="product-input-header">
+              <span>Product Name</span>
+              <span>Profit per unit (€)</span>
+              ${resources.map(r => `<span>${r.name} / unit</span>`).join('')}
+              <span></span>
+            </div>
+            <div id="products-list"></div>
+            <button type="button" id="add-product-btn">Add Product</button>
+          </div>
+          <button class="calc-btn" type="submit">Optimize Mix</button>
+        </form>
+        <div id="product-mix-result"></div>
+      </div>
+      <div class="tool-usage-note">
+        <b>How to use this tool:</b><br>
+        - Define resources (e.g., machines, workers, materials) and their inventory stock (max 5 resources).<br>
+        - For each product, enter profit per unit and specify, for each resource, how much is required per unit produced.<br>
+        - Click "Optimize Mix" to calculate the optimal product quantities for maximum profit without exceeding any resource inventory.<br>
+        <br>
+        <b>Note:</b> All values should be non-negative. At least one resource and one product are required. Results are computed using linear programming.
+      </div>
+    `;
+
+    root.querySelector('.back-btn').onclick = renderSelector;
+
+    // Render resources
+    renderResources();
+    // Render products
+    renderProducts();
+
+    // Add resource
+    root.querySelector("#add-resource-btn").onclick = function() {
+      if (resources.length < 5) {
+        resources.push({ name: `Resource ${resources.length + 1}`, stock: 0 });
+        // For every product, add a new resource entry to resourceMap
+        products.forEach(prod => prod.resourceMap.push({ resourceIdx: resources.length - 1, amount: 0 }));
+        rerender();
+      }
+    };
+
+    // Add product
+    root.querySelector("#add-product-btn").onclick = function() {
+      let newResourceMap = resources.map((r, i) => ({ resourceIdx: i, amount: 0 }));
+      products.push({ name: `Product ${String.fromCharCode(65 + products.length)}`, profit: 0, resourceMap: newResourceMap });
+      rerender();
+    };
+
+    // Handle optimization
+    root.querySelector("#product-mix-form").onsubmit = function(e) {
+      e.preventDefault();
+
+      // Build model
+      let model = {
+        optimize: "profit",
+        opType: "max",
+        constraints: {},
+        variables: {}
+      };
+
+      // Constraints: for each resource
+      resources.forEach((resource, rIdx) => {
+        model.constraints[resource.name] = { max: parseFloat(resource.stock) || 0 };
+      });
+
+      // Variables: for each product
+      products.forEach((prod, pIdx) => {
+        let prodVars = { profit: parseFloat(prod.profit) || 0 };
+        prod.resourceMap.forEach((rm) => {
+          let rname = resources[rm.resourceIdx]?.name || `R${rm.resourceIdx+1}`;
+          prodVars[rname] = parseFloat(rm.amount) || 0;
+        });
+        model.variables[prod.name] = prodVars;
+      });
+
+      // Solve
+      let result;
+      try {
+        result = solver.Solve(model);
+      } catch {
+        result = null;
+      }
+      if (!result || !result.feasible) {
+        root.querySelector("#product-mix-result").innerHTML = `<div class="result-block" style="color:#e43f5a;">No feasible solution found.</div>`;
+        return;
+      }
+
+      let output = `<div class="result-block"><b>Optimal Product Mix:</b><br>`;
+      products.forEach(prod => {
+        output += `${prod.name}: <b>${result[prod.name] ? result[prod.name].toFixed(2) : 0}</b> units<br>`;
+      });
+      output += `<br><b>Total Profit:</b> €${result.result.toFixed(2)}</div>`;
+      root.querySelector("#product-mix-result").innerHTML = output;
+    };
+  }
+
+  function renderResources() {
+    const container = root.querySelector("#resource-list");
+    container.innerHTML = resources.map((res, idx) => `
+      <div class="resource-input-row" data-idx="${idx}">
+        <input type="text" placeholder="Resource Name" value="${res.name}" required aria-label="Resource Name">
+        <input type="number" min="0" step="0.01" placeholder="Stock" value="${res.stock}" required aria-label="Inventory Stock">
+        <button type="button" class="remove-btn" title="Remove" ${resources.length <= 1 ? 'disabled' : ''}>
           <span class="material-icons">close</span>
         </button>
       </div>
     `).join("");
-
-    Array.from(container.querySelectorAll('.product-input-row')).forEach((row, idx) => {
-      row.querySelectorAll('input')[0].oninput = e => products[idx].name = e.target.value;
-      row.querySelectorAll('input')[1].oninput = e => products[idx].profit = parseFloat(e.target.value) || 0;
-      row.querySelectorAll('input')[2].oninput = e => products[idx].resource = parseFloat(e.target.value) || 0;
+    Array.from(container.querySelectorAll('.resource-input-row')).forEach((row, idx) => {
+      row.querySelectorAll('input')[0].oninput = e => {
+        resources[idx].name = e.target.value;
+        rerender(); // to update product resource dropdowns/headers live
+      };
+      row.querySelectorAll('input')[1].oninput = e => resources[idx].stock = parseFloat(e.target.value) || 0;
       row.querySelector('.remove-btn').onclick = function() {
-        if (products.length > 1) {
-          products.splice(idx, 1);
-          renderProducts();
+        if (resources.length > 1) {
+          resources.splice(idx, 1);
+          // For every product, remove resourceMap entry for this idx
+          products.forEach(prod => prod.resourceMap.splice(idx, 1));
+          rerender();
         }
       };
     });
   }
 
-  root.querySelector("#add-product-btn").onclick = function() {
-    products.push({ name: `Product ${String.fromCharCode(65 + products.length)}`, profit: 0, resource: 0 });
-    renderProducts();
-  };
-
-  root.querySelector("#product-mix-form").onsubmit = function (e) {
-    e.preventDefault();
-    const limit = parseFloat(root.querySelector("#resource-limit").value) || 0;
-    const model = {
-      optimize: "profit",
-      opType: "max",
-      constraints: { resource: { "max": limit } },
-      variables: {}
-    };
-    products.forEach(prod => {
-      model.variables[prod.name] = { profit: prod.profit, resource: prod.resource };
+  function renderProducts() {
+    const container = root.querySelector("#products-list");
+    container.innerHTML = products.map((prod, pIdx) => `
+      <div class="product-input-row" data-idx="${pIdx}">
+        <input type="text" placeholder="Product Name" value="${prod.name}" required aria-label="Product Name">
+        <input type="number" min="0" step="0.01" placeholder="Profit (€)" value="${prod.profit}" required aria-label="Profit per unit (€)">
+        ${
+          resources.map((res, rIdx) => {
+            return `<input type="number" min="0" step="0.01" placeholder="${res.name} / unit" value="${prod.resourceMap[rIdx]?.amount ?? 0}" required aria-label="${res.name} per unit">`
+          }).join("")
+        }
+        <button type="button" class="remove-btn" title="Remove" ${products.length <= 1 ? 'disabled' : ''}>
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+    `).join("");
+    Array.from(container.querySelectorAll('.product-input-row')).forEach((row, pIdx) => {
+      row.querySelectorAll('input')[0].oninput = e => products[pIdx].name = e.target.value;
+      row.querySelectorAll('input')[1].oninput = e => products[pIdx].profit = parseFloat(e.target.value) || 0;
+      // Resource per unit
+      for (let rIdx = 0; rIdx < resources.length; ++rIdx) {
+        row.querySelectorAll('input')[2 + rIdx].oninput = e => {
+          products[pIdx].resourceMap[rIdx].amount = parseFloat(e.target.value) || 0;
+        };
+      }
+      row.querySelector('.remove-btn').onclick = function() {
+        if (products.length > 1) {
+          products.splice(pIdx, 1);
+          rerender();
+        }
+      };
     });
+  }
 
-    let result;
-    try {
-      result = solver.Solve(model);
-    } catch {
-      result = null;
-    }
-    if (!result || !result.feasible) {
-      root.querySelector("#product-mix-result").innerHTML = `<div class="result-block" style="color:#e43f5a;">No feasible solution found.</div>`;
-      return;
-    }
-
-    let output = `<div class="result-block"><b>Optimal Product Mix:</b><br>`;
-    products.forEach(prod => {
-      output += `${prod.name}: <b>${result[prod.name] ? result[prod.name].toFixed(2) : 0}</b> units<br>`;
-    });
-    output += `<br><b>Total Profit:</b> €${result.result.toFixed(2)}</div>`;
-    root.querySelector("#product-mix-result").innerHTML = output;
-  };
+  rerender();
 }
 
 renderSelector();
