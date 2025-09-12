@@ -6,6 +6,8 @@
   --surface: #fff;
   --on-primary: #fff;
   --on-surface: #222;
+  --danger: #e43f5a;
+  --danger-hover: #b90e2b;
   --card-shadow: 0 4px 24px 0 rgba(25, 118, 210, 0.10);
 }
 
@@ -28,11 +30,11 @@ body {
 
 .material-card {
   background: var(--surface);
-  border-radius: 24px;
+  border-radius: 30px;
   box-shadow: var(--card-shadow);
   padding: 3.5rem 2.6rem 2.6rem 2.6rem;
   min-width: 340px;
-  max-width: 570px;
+  max-width: 540px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -72,7 +74,8 @@ body {
   outline: none;
 }
 
-.selector-btn:hover, .selector-btn:focus {
+.selector-btn:hover,
+.selector-btn:focus {
   background: var(--primary-accent);
   box-shadow: 0 4px 20px 0 rgba(25, 118, 210, 0.16);
   transform: translateY(-2px) scale(1.025);
@@ -103,197 +106,71 @@ body {
 }
 
 .app-content-title {
-  font-size: 1.45rem;
-  font-weight: 700;
+  font-size: 1.7rem;
+  font-weight: 800;
   color: var(--primary-blue-dark);
   margin-bottom: 2.1rem;
   text-align: center;
   letter-spacing: 0.01em;
 }
 
-.form-section-title {
-  color: var(--primary-blue);
-  font-weight: 700;
-  font-size: 1.09rem;
-  margin-bottom: 1.1rem;
-  margin-top: 1.3rem;
+/* FINANCIAL PLANNING FORM */
+.financial-form-2col {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin-bottom: 2.2rem;
+}
+
+.financial-form-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.financial-form-row label {
+  flex: 1.5;
+  color: #234;
+  font-size: 1.13rem;
+  font-weight: 500;
   text-align: left;
+  letter-spacing: 0.01em;
 }
 
-.divider {
-  border: none;
-  border-top: 1.5px solid #e3eaf4;
-  margin: 1.7rem 0 1.1rem 0;
-  width: 100%;
-}
-
-/* Resource Section */
-.resource-input-grid {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  margin-bottom: 0.7rem;
-}
-.resource-input-header {
-  display: grid;
-  grid-template-columns: 2.2fr 1.2fr 0.4fr;
-  gap: 0.4rem;
-  font-size: 1rem;
-  color: #1565c0;
-  font-weight: 600;
-}
-.resource-input-row {
-  display: grid;
-  grid-template-columns: 2.2fr 1.2fr 0.4fr;
-  gap: 0.4rem;
-  align-items: center;
-}
-.resource-input-row input {
-  border: 1.5px solid #c6d7ee;
-  border-radius: 8px;
-  padding: 0.6rem 0.8rem;
-  font-size: 1rem;
-  background: #fff;
-  transition: border 0.2s;
+.financial-form-row input {
+  flex: 1.35;
+  border: 1.7px solid #c6d7ee;
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  font-size: 1.13rem;
+  background: #f6faff;
+  transition: border 0.2s, box-shadow 0.2s;
   outline: none;
   min-width: 0;
-  width: 100%;
-}
-.resource-input-row input:focus {
-  border-color: var(--primary-blue);
-}
-.resource-input-row .remove-btn {
-  background: none;
-  border: none;
-  color: #e43f5a;
-  font-size: 1.5rem;
-  cursor: pointer;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.16s;
-  width: 36px;
-  height: 36px;
-}
-.resource-input-row .remove-btn:disabled {
-  opacity: 0.3;
-  cursor: default;
-}
-.resource-input-row .remove-btn:hover:not(:disabled) {
-  background: #f2cdd2;
-  color: #b90e2b;
-}
-#add-resource-btn {
-  background: var(--primary-blue);
-  color: var(--on-primary);
-  font-size: 1rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  padding: 0.6rem 1.2rem;
-  margin-top: 0.7rem;
-  cursor: pointer;
-  transition: background 0.18s;
-  box-shadow: 0 2px 8px 0 rgba(25, 118, 210, 0.08);
-  width: max-content;
-}
-#add-resource-btn:hover {
-  background: var(--primary-accent);
+  box-sizing: border-box;
 }
 
-/* Product Section */
-.product-input-grid {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  margin-bottom: 0.7rem;
-}
-.product-input-header {
-  display: grid;
-  grid-template-columns: 2.1fr 1.5fr repeat(var(--resource-count, 1), 1.1fr) 0.4fr;
-  gap: 0.4rem;
-  font-size: 1rem;
-  color: #1565c0;
-  font-weight: 600;
-}
-.product-input-row {
-  display: grid;
-  grid-template-columns: 2.1fr 1.5fr repeat(var(--resource-count, 1), 1.1fr) 0.4fr;
-  gap: 0.4rem;
-  align-items: center;
-  width: 100%;
-}
-.product-input-row input, .product-input-row select {
-  border: 1.5px solid #c6d7ee;
-  border-radius: 8px;
-  padding: 0.6rem 0.8rem;
-  font-size: 1rem;
-  background: #fff;
-  transition: border 0.2s;
-  outline: none;
-  min-width: 0;
-  width: 100%;
-}
-.product-input-row input:focus, .product-input-row select:focus {
+.financial-form-row input:focus {
   border-color: var(--primary-blue);
-}
-.product-input-row .remove-btn {
-  background: none;
-  border: none;
-  color: #e43f5a;
-  font-size: 1.5rem;
-  cursor: pointer;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.16s;
-  width: 36px;
-  height: 36px;
-}
-.product-input-row .remove-btn:disabled {
-  opacity: 0.3;
-  cursor: default;
-}
-.product-input-row .remove-btn:hover:not(:disabled) {
-  background: #f2cdd2;
-  color: #b90e2b;
-}
-#add-product-btn {
-  background: var(--primary-blue);
-  color: var(--on-primary);
-  font-size: 1rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  padding: 0.6rem 1.2rem;
-  margin-top: 0.7rem;
-  cursor: pointer;
-  transition: background 0.18s;
-  box-shadow: 0 2px 8px 0 rgba(25, 118, 210, 0.08);
-  width: max-content;
-}
-#add-product-btn:hover {
-  background: var(--primary-accent);
+  box-shadow: 0 2px 8px 0 #bbdefb66;
 }
 
 .calc-btn {
   background: var(--primary-blue);
   color: var(--on-primary);
   border: none;
-  border-radius: 12px;
-  padding: 1rem 0;
-  font-size: 1.18rem;
+  border-radius: 16px;
+  padding: 1.16rem 0;
+  font-size: 1.28rem;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 1.1rem;
+  margin-top: 1.7rem;
   width: 100%;
-  transition: background 0.18s;
-  box-shadow: 0 2px 10px 0 rgba(25, 118, 210, 0.08);
+  transition: background 0.18s, box-shadow 0.18s;
+  box-shadow: 0 2px 14px 0 rgba(25, 118, 210, 0.11);
+  letter-spacing: 0.01em;
 }
 
 .calc-btn:hover {
@@ -303,16 +180,16 @@ body {
 .result-block {
   background: #e3f2fd;
   color: #1565c0;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 1.3rem 1.2rem;
-  margin-top: 1.15rem;
-  font-size: 1.1rem;
+  margin-top: 1.35rem;
+  font-size: 1.13rem;
   width: 100%;
   text-align: center;
   border: 1.5px solid #bbdefb;
   font-weight: 500;
   box-sizing: border-box;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .result-block strong {
@@ -334,19 +211,168 @@ body {
   margin-top: 0.7rem;
 }
 
+/* Section Titles and Dividers */
+.form-section-title {
+  color: var(--primary-blue);
+  font-weight: 700;
+  font-size: 1.13rem;
+  margin-bottom: 1.1rem;
+  margin-top: 1.3rem;
+  width: 100%;
+  text-align: left;
+  letter-spacing: 0.02em;
+}
+
+.divider {
+  border: none;
+  border-top: 1.8px solid #e3eaf4;
+  margin: 1.8rem 0 1.2rem 0;
+  width: 100%;
+}
+
+/* Dynamic Resource/Product Table Styles */
+.resource-input-grid,
+.product-input-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+.resource-input-header,
+.product-input-header {
+  display: grid;
+  align-items: center;
+  font-size: 1.05rem;
+  color: #1565c0;
+  font-weight: 600;
+  background: none;
+  letter-spacing: 0.01em;
+}
+.resource-input-header {
+  grid-template-columns: 2.2fr 1.2fr 0.6fr;
+  margin-bottom: 0.2rem;
+}
+.product-input-header {
+  grid-template-columns: 2.1fr 1.5fr repeat(var(--resource-count, 1), 1.1fr) 0.6fr;
+  margin-bottom: 0.2rem;
+}
+.resource-input-row,
+.product-input-row {
+  display: grid;
+  align-items: center;
+  background: #f6faff;
+  border-radius: 10px;
+  margin-bottom: 0.17rem;
+}
+.resource-input-row {
+  grid-template-columns: 2.2fr 1.2fr 0.6fr;
+}
+.product-input-row {
+  grid-template-columns: 2.1fr 1.5fr repeat(var(--resource-count, 1), 1.1fr) 0.6fr;
+}
+.resource-input-row input,
+.product-input-row input,
+.product-input-row select {
+  border: 1.5px solid #c6d7ee;
+  border-radius: 9px;
+  padding: 0.7rem 1rem;
+  font-size: 1.08rem;
+  background: #fff;
+  transition: border 0.2s, box-shadow 0.18s;
+  outline: none;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.resource-input-row input:focus,
+.product-input-row input:focus,
+.product-input-row select:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 2px 8px 0 #bbdefb33;
+}
+
+/* Remove Button - PRETTY, Centered, Circular */
+.resource-input-row .remove-btn,
+.product-input-row .remove-btn {
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-size: 1.3rem;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s, box-shadow 0.18s;
+  width: 32px;
+  height: 32px;
+  margin: 0 auto;
+  outline: none;
+  box-shadow: none;
+  padding: 0;
+}
+.resource-input-row .remove-btn:disabled,
+.product-input-row .remove-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.resource-input-row .remove-btn:hover:not(:disabled),
+.product-input-row .remove-btn:hover:not(:disabled) {
+  background: #ffeaea;
+  box-shadow: 0 0 0 2px #ffeaea;
+  color: var(--danger-hover);
+}
+.resource-input-row .remove-btn .material-icons,
+.product-input-row .remove-btn .material-icons {
+  font-size: 1.45rem;
+  line-height: 1;
+  display: block;
+  margin: 0;
+}
+
+/* Add Buttons Consistency */
+#add-product-btn,
+#add-resource-btn {
+  background: var(--primary-blue);
+  color: var(--on-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.3rem;
+  margin-top: 0.7rem;
+  cursor: pointer;
+  transition: background 0.18s;
+  box-shadow: 0 2px 8px 0 rgba(25, 118, 210, 0.08);
+  width: max-content;
+  letter-spacing: 0.01em;
+}
+#add-product-btn:disabled,
+#add-resource-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+#add-product-btn:hover:not(:disabled),
+#add-resource-btn:hover:not(:disabled) {
+  background: var(--primary-accent);
+}
+
+/* Usage Note */
 .tool-usage-note {
   background: #fffde7;
   color: #5d5d00;
-  border-radius: 14px;
+  border-radius: 16px;
   border: 1.5px solid #ffe082;
   box-shadow: 0 2px 10px 0 rgba(25, 118, 210, 0.06);
-  padding: 1.3rem 1.3rem 1.2rem 1.3rem;
-  font-size: 1.05rem;
+  padding: 1.45rem 1.3rem 1.25rem 1.3rem;
+  font-size: 1.07rem;
   width: 100%;
-  max-width: 570px;
+  max-width: 540px;
   text-align: left;
   margin: 2.1rem auto 0 auto;
-  line-height: 1.55;
+  line-height: 1.57;
+  letter-spacing: 0.01em;
 }
 
 footer {
@@ -358,7 +384,8 @@ footer {
 }
 
 @media (max-width: 700px) {
-  .material-card, .tool-usage-note {
+  .material-card,
+  .tool-usage-note {
     padding: 1.3rem 0.6rem 1rem 0.6rem;
     min-width: unset;
     max-width: 98vw;

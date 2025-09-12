@@ -34,11 +34,11 @@ function renderFinancialUI() {
         <div class="financial-form-2col">
           <div class="financial-form-row">
             <label for="goal">Goal (e.g., Target Amount):</label>
-            <input type="number" id="goal" required placeholder="Target (e.g., 100000)" min="0">
+            <input type="number" id="goal" required placeholder="e.g., 100000" min="0">
           </div>
           <div class="financial-form-row">
             <label for="years">Years:</label>
-            <input type="number" id="years" required placeholder="Years (e.g., 5)" min="1">
+            <input type="number" id="years" required placeholder="e.g., 5" min="1">
           </div>
           <div class="financial-form-row">
             <label for="rate">Expected Annual Return (%):</label>
