@@ -37,8 +37,8 @@ function renderFinancialUI() {
             <input type="number" id="goal" required placeholder="e.g., 100000" min="0">
           </div>
           <div class="financial-form-row">
-            <label for="years">Years:</label>
-            <input type="number" id="years" required placeholder="e.g., 5" min="1">
+            <label for="months">Months:</label>
+            <input type="number" id="months" required placeholder="e.g., 60" min="1">
           </div>
           <div class="financial-form-row">
             <label for="rate">Expected Annual Return (%):</label>
@@ -59,12 +59,12 @@ function renderFinancialUI() {
   root.querySelector("#financial-form").onsubmit = function (e) {
     e.preventDefault();
     const goal = parseFloat(root.querySelector("#goal").value) || 0;
-    const years = parseInt(root.querySelector("#years").value) || 1;
+    const months = parseInt(root.querySelector("#months").value) || 1;
     const rate = parseFloat(root.querySelector("#rate").value) || 0;
     const budget = parseFloat(root.querySelector("#budget").value) || 0;
 
     let r = rate / 100 / 12; // monthly rate
-    let n = years * 12;
+    let n = months; // direct, since input is now months
     let FV = goal;
     let PV = budget;
     let monthly;
@@ -78,7 +78,7 @@ function renderFinancialUI() {
     root.querySelector("#financial-result").innerHTML = showResult
       ? `
       <div class="result-block">
-        To reach your goal of <strong>€${goal.toLocaleString()}</strong> in <strong>${years} years</strong> with an initial investment of <strong>€${budget.toLocaleString()}</strong> and an expected annual return of <strong>${rate}%</strong>:
+        To reach your goal of <strong>€${goal.toLocaleString()}</strong> in <strong>${months} months</strong> with an initial investment of <strong>€${budget.toLocaleString()}</strong> and an expected annual return of <strong>${rate}%</strong>:
         <span class="result-main">
           Invest <strong>€${monthly.toFixed(2)}</strong> per month
         </span>
@@ -87,7 +87,7 @@ function renderFinancialUI() {
       `
       : `
       <div class="result-block" style="color:#e43f5a;">
-        <strong>Please check your inputs.</strong> Goal should be greater than initial investment, and years > 0.
+        <strong>Please check your inputs.</strong> Goal should be greater than initial investment, and months > 0.
       </div>
       `;
   };
