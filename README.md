@@ -1,4 +1,4 @@
-# Open Solver Simulator
+# Linear Solver Tools
 
 A modern, open source web application for interactive optimization and planning, inspired by Meta, Twitter, and Google Material Design.  
 Includes two tools:
@@ -23,7 +23,7 @@ Includes two tools:
 ```text
 .
 ├── index.html         # App HTML entry point
-├── styles.css         # Global Material-inspired styles and layout
+├── style.css         # Global Material-inspired styles and layout
 ├── app.js             # Interactive logic for both tools
 └── README.md          # This file
 ```
@@ -51,7 +51,8 @@ Includes two tools:
 
 - JavaScript LP Solver: [JWally/jsLPSolver](https://github.com/JWally/jsLPSolver)
 - Design inspired by Google Material, Meta, and Twitter web products
+- Developed using AI
 
 ## License
 
-MIT
+GNU Gneral Public License V3
